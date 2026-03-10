@@ -13,16 +13,18 @@ use impactvault::domain::sentinel::{Sentinel, SentinelConfig};
 
 struct MockAdapter {
     health_score: f64,
+    name: &'static str,
+    risk: RiskSpectrum,
 }
 
 #[async_trait]
 impl YieldAdapter for MockAdapter {
     fn name(&self) -> &str {
-        "mock"
+        self.name
     }
 
     fn risk_position(&self) -> RiskSpectrum {
-        RiskSpectrum::Sovereign
+        self.risk
     }
 
     async fn deposit(&self, _amount: u128) -> anyhow::Result<TxRequest> {
@@ -39,7 +41,7 @@ impl YieldAdapter for MockAdapter {
 
     async fn health_check(&self) -> anyhow::Result<HealthStatus> {
         Ok(HealthStatus {
-            adapter_name: "mock".into(),
+            adapter_name: self.name.into(),
             score: self.health_score,
             oracle_fresh: self.health_score > 0.3,
             liquidity_adequate: self.health_score > 0.2,
@@ -59,7 +61,7 @@ impl YieldAdapter for MockAdapter {
 
 fn make_sentinel(health_score: f64) -> Sentinel {
     let adapters: Vec<Box<dyn YieldAdapter>> =
-        vec![Box::new(MockAdapter { health_score })];
+        vec![Box::new(MockAdapter { health_score, name: "mock", risk: RiskSpectrum::Sovereign })];
     let vault_config = Arc::new(RwLock::new(VaultConfig::default()));
     Sentinel::new(SentinelConfig::default(), vault_config, adapters)
 }
@@ -158,4 +160,18 @@ async fn test_status_updates_after_check() {
         let status = handle.read().await;
         assert_eq!(status.checks_completed, 2);
     }
+}
+
+#[tokio::test]
+async fn test_sentinel_with_multiple_adapters() {
+    let adapters: Vec<Box<dyn YieldAdapter>> = vec![
+        Box::new(MockAdapter { health_score: 0.9, name: "sovereign_bond", risk: RiskSpectrum::Sovereign }),
+        Box::new(MockAdapter { health_score: 0.5, name: "liquid_staking", risk: RiskSpectrum::LiquidStaking }),
+        Box::new(MockAdapter { health_score: 0.85, name: "compound_lending", risk: RiskSpectrum::DiversifiedLending }),
+    ];
+    let vault_config = Arc::new(RwLock::new(VaultConfig::default()));
+    let sentinel = Sentinel::new(SentinelConfig::default(), vault_config, adapters);
+
+    let results = sentinel.check_once().await;
+    assert_eq!(results.len(), 3);
 }
