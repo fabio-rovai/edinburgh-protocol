@@ -27,6 +27,11 @@ fn test_schema_tables_exist() {
     assert!(tables.contains(&"patterns".to_string()));
     assert!(tables.contains(&"skills".to_string()));
     assert!(tables.contains(&"qa_results".to_string()));
+    // Migration 004: vault state tables
+    assert!(tables.contains(&"vaults".to_string()));
+    assert!(tables.contains(&"adapter_health_log".to_string()));
+    assert!(tables.contains(&"disbursements".to_string()));
+    assert!(tables.contains(&"risk_events".to_string()));
 }
 
 #[test]

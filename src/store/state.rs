@@ -7,6 +7,7 @@ use uuid::Uuid;
 const MIGRATION: &str = include_str!("migrations/001_initial.sql");
 const MIGRATION_002: &str = include_str!("migrations/002_ontology_versions.sql");
 const MIGRATION_003: &str = include_str!("migrations/003_domain_locks.sql");
+const MIGRATION_004: &str = include_str!("migrations/004_vault_state.sql");
 
 /// SQLite-backed state store.
 ///
@@ -41,6 +42,7 @@ impl StateDb {
         conn.execute_batch(&ddl)?;
         conn.execute_batch(MIGRATION_002)?;
         conn.execute_batch(MIGRATION_003)?;
+        conn.execute_batch(MIGRATION_004)?;
 
         Ok(Self {
             conn: Arc::new(Mutex::new(conn)),

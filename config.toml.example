@@ -6,6 +6,33 @@
 # Base directory for ImpactVault data (database, etc.)
 # data_dir = "~/.impactvault"
 
+[sentinel]
+poll_interval_secs = 60
+auto_derisk_enabled = true
+
+[api]
+port = 3000
+
+[vault]
+approved_sources = ["Sovereign", "StablecoinSavings"]
+concentration_limit = 80
+derisking_health_threshold = 0.5
+
+[[adapters]]
+name = "sovereign_bond"
+type = "sovereign_bond"
+contract_address = "0x..."
+chain_id = 11155111
+rpc_url = "https://rpc.sepolia.org"
+
+[[adapters]]
+name = "aave_savings"
+type = "aave_savings"
+pool_address = "0x..."
+asset_address = "0x..."
+chain_id = 11155111
+rpc_url = "https://rpc.sepolia.org"
+
 [enforcer]
 # Whether the policy enforcer is active
 # enabled = true
@@ -16,3 +43,15 @@
 [lineage]
 # Port for the lineage tracking HTTP API (0 = auto-assign)
 # http_port = 0
+
+[[enforcer.rules]]
+name = "derisk_on_health_breach"
+description = "Trigger derisk if health checks fail repeatedly"
+action = "block"
+enabled = true
+
+[enforcer.rules.condition]
+type = "MissingInWindow"
+trigger = "sentinel_check"
+required = "health_ok"
+window = 3

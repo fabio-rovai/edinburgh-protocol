@@ -78,34 +78,10 @@ impl Enforcer {
     /// Create a new enforcer pre-loaded with the built-in rules.
     pub fn new() -> Self {
         let rules = vec![
-            // 1. QA after docx write
-            Rule {
-                name: "qa_after_docx_write".into(),
-                description: "Document write tool called but no qa_ tool in last 3 calls".into(),
-                action: Action::Warn,
-                enabled: true,
-                condition: RuleCondition::MissingInWindow {
-                    trigger: "write_document".into(),
-                    required: "qa_".into(),
-                    window: 3,
-                },
-            },
-            // 2. Render after edit
-            Rule {
-                name: "render_after_edit".into(),
-                description: "3+ document write calls without render".into(),
-                action: Action::Warn,
-                enabled: true,
-                condition: RuleCondition::RepeatWithout {
-                    category: "write_document".into(),
-                    count: 3,
-                    required: "render_document".into(),
-                },
-            },
-            // 3. Health gate (stub)
+            // 1. Health gate (stub – retained from prior phases)
             Rule {
                 name: "health_gate".into(),
-                description: "Stub -- health check integration is Phase 7.2".into(),
+                description: "Stub -- health check integration placeholder".into(),
                 action: Action::Allow,
                 enabled: true,
                 condition: RuleCondition::MissingInWindow {
@@ -114,28 +90,40 @@ impl Enforcer {
                     window: 0,
                 },
             },
-            // 4. Ontology validate after save
+            // 2. Derisk on repeated health-check failures
             Rule {
-                name: "onto_validate_after_save".into(),
-                description: "Warn if ontology is saved 3+ times without validation".into(),
-                action: Action::Warn,
+                name: "derisk_on_health_breach".into(),
+                description: "Trigger derisk if health checks fail repeatedly".into(),
+                action: Action::Block,
                 enabled: true,
-                condition: RuleCondition::RepeatWithout {
-                    category: "onto_save".into(),
-                    count: 3,
-                    required: "onto_validate".into(),
+                condition: RuleCondition::MissingInWindow {
+                    trigger: "sentinel_check".into(),
+                    required: "health_ok".into(),
+                    window: 3,
                 },
             },
-            // 5. Version before push
+            // 3. Oracle staleness warning
             Rule {
-                name: "onto_version_before_push".into(),
-                description: "Warn if pushing without a saved version snapshot".into(),
+                name: "oracle_staleness".into(),
+                description: "Warn if oracle data is stale".into(),
                 action: Action::Warn,
                 enabled: true,
                 condition: RuleCondition::MissingInWindow {
-                    trigger: "onto_push".into(),
-                    required: "onto_version".into(),
-                    window: 5,
+                    trigger: "adapter_query".into(),
+                    required: "oracle_fresh".into(),
+                    window: 1,
+                },
+            },
+            // 4. Concentration limit guard
+            Rule {
+                name: "concentration_limit".into(),
+                description: "Block deposits that would exceed concentration limit".into(),
+                action: Action::Block,
+                enabled: true,
+                condition: RuleCondition::RepeatWithout {
+                    category: "deposit".into(),
+                    count: 3,
+                    required: "rebalance".into(),
                 },
             },
         ];
@@ -523,7 +511,7 @@ mod tests {
         e.reload_from_db(&db).unwrap();
         assert!(!e.rules().is_empty());
         assert_eq!(
-            e.rules().iter().find(|r| r.name == "qa_after_docx_write").unwrap().enabled,
+            e.rules().iter().find(|r| r.name == "derisk_on_health_breach").unwrap().enabled,
             true
         );
     }
