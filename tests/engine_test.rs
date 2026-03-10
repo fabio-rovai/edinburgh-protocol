@@ -1,4 +1,5 @@
 use impactvault::domain::engine::*;
+use std::collections::HashMap;
 
 // --- Task 3: Type tests ---
 
@@ -13,6 +14,26 @@ fn test_risk_spectrum_extended_ordering() {
     assert!(RiskSpectrum::StablecoinSavings < RiskSpectrum::LiquidStaking);
     assert!(RiskSpectrum::LiquidStaking < RiskSpectrum::DiversifiedLending);
     assert!(RiskSpectrum::DiversifiedLending < RiskSpectrum::MultiStrategy);
+}
+
+#[test]
+fn test_vault_config_default_has_empty_weights() {
+    let config = VaultConfig::default();
+    assert!(config.source_weights.is_empty());
+}
+
+#[test]
+fn test_vault_config_with_weights() {
+    let mut weights = HashMap::new();
+    weights.insert(RiskSpectrum::Sovereign, 40u8);
+    weights.insert(RiskSpectrum::StablecoinSavings, 35);
+    weights.insert(RiskSpectrum::LiquidStaking, 25);
+    let config = VaultConfig {
+        source_weights: weights.clone(),
+        ..VaultConfig::default()
+    };
+    assert_eq!(config.source_weights.len(), 3);
+    assert_eq!(config.source_weights[&RiskSpectrum::Sovereign], 40);
 }
 
 #[test]

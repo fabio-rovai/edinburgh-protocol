@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub enum RiskSpectrum {
@@ -16,6 +17,7 @@ pub struct VaultConfig {
     pub concentration_limit: u8,           // max % in single adapter
     pub derisking_health_threshold: f64,   // 0.0-1.0
     pub auto_derisk_enabled: bool,
+    pub source_weights: HashMap<RiskSpectrum, u8>,
 }
 
 impl Default for VaultConfig {
@@ -26,6 +28,7 @@ impl Default for VaultConfig {
             concentration_limit: 80,
             derisking_health_threshold: 0.5,
             auto_derisk_enabled: true,
+            source_weights: HashMap::new(),
         }
     }
 }
