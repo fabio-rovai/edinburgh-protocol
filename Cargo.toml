@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 description = "Open-source risk-curated yield infrastructure for social impact"
 license = "MIT"
-repository = "https://github.com/fabio-rovai/impactvault"
+repository = "https://github.com/fabio-rovai/ImpactVault"
 
 [[bin]]
 name = "impactvault"
