@@ -13,6 +13,9 @@ pub struct Config {
     pub adapters: Option<Vec<AdapterTomlConfig>>,
     pub sentinel: Option<SentinelTomlConfig>,
     pub api: Option<ApiConfig>,
+    pub governance: Option<GovernanceConfig>,
+    pub dpga: Option<DpgaConfig>,
+    pub dashboard: Option<DashboardConfig>,
 }
 
 impl Default for Config {
@@ -25,6 +28,9 @@ impl Default for Config {
             adapters: None,
             sentinel: None,
             api: None,
+            governance: None,
+            dpga: None,
+            dashboard: None,
         }
     }
 }
@@ -144,6 +150,10 @@ pub struct AdapterTomlConfig {
     pub pool_address: Option<String>,
     #[serde(default)]
     pub asset_address: Option<String>,
+    #[serde(default)]
+    pub wsteth_address: Option<String>,
+    #[serde(default)]
+    pub comet_address: Option<String>,
     #[serde(default = "default_chain_id")]
     pub chain_id: u64,
     #[serde(default = "default_rpc_url")]
@@ -184,6 +194,47 @@ pub struct ApiConfig {
 
 fn default_api_port() -> u16 {
     3000
+}
+
+/// Governance configuration (multisig, DAO, etc.).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GovernanceConfig {
+    #[serde(rename = "type")]
+    pub governance_type: String,
+    #[serde(default)]
+    pub contract_address: Option<String>,
+    #[serde(default = "default_threshold")]
+    pub threshold: u8,
+    #[serde(default)]
+    pub signers: Vec<String>,
+}
+
+fn default_threshold() -> u8 {
+    2
+}
+
+/// DPGA (Digital Public Goods Alliance) integration settings.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DpgaConfig {
+    #[serde(default = "default_dpga_url")]
+    pub api_url: String,
+    #[serde(default)]
+    pub enabled: bool,
+}
+
+fn default_dpga_url() -> String {
+    "https://api.digitalpublicgoods.net/dpgs".into()
+}
+
+/// Dashboard UI configuration.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DashboardConfig {
+    #[serde(default = "default_dashboard_api")]
+    pub api_url: String,
+}
+
+fn default_dashboard_api() -> String {
+    "http://localhost:3000".into()
 }
 
 /// Expand a leading `~` or `~/` in a path to the user's home directory.

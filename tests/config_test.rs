@@ -28,6 +28,9 @@ fn test_config_defaults() {
     assert!(config.adapters.is_none());
     assert!(config.sentinel.is_none());
     assert!(config.api.is_none());
+    assert!(config.governance.is_none());
+    assert!(config.dpga.is_none());
+    assert!(config.dashboard.is_none());
 }
 
 #[test]
@@ -105,4 +108,49 @@ port = 8080
     let config = impactvault::config::Config::load(f.path()).unwrap();
     let api = config.api.expect("api section should be present");
     assert_eq!(api.port, 8080);
+}
+
+#[test]
+fn test_parse_config_with_new_adapters() {
+    let toml_str = r#"
+[general]
+name = "test"
+
+[[adapters]]
+name = "liquid_staking"
+type = "liquid_staking"
+wsteth_address = "0x1234"
+chain_id = 8453
+rpc_url = "https://mainnet.base.org"
+
+[[adapters]]
+name = "compound_lending"
+type = "compound_lending"
+comet_address = "0x5678"
+asset_address = "0x9abc"
+chain_id = 8453
+rpc_url = "https://mainnet.base.org"
+
+[governance]
+type = "multisig"
+contract_address = "0xgov"
+threshold = 2
+signers = ["0xsigner1", "0xsigner2", "0xsigner3"]
+
+[dpga]
+api_url = "https://api.digitalpublicgoods.net/dpgs"
+enabled = true
+"#;
+    let config: impactvault::config::Config = toml::from_str(toml_str).expect("should parse");
+    let adapters = config.adapters.unwrap();
+    assert_eq!(adapters.len(), 2);
+    assert_eq!(adapters[0].wsteth_address.as_deref(), Some("0x1234"));
+    assert_eq!(adapters[1].comet_address.as_deref(), Some("0x5678"));
+
+    let gov = config.governance.unwrap();
+    assert_eq!(gov.threshold, 2);
+    assert_eq!(gov.signers.len(), 3);
+
+    let dpga = config.dpga.unwrap();
+    assert!(dpga.enabled);
 }
