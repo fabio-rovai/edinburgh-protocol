@@ -3,7 +3,7 @@ use tempfile::TempDir;
 #[test]
 fn test_db_opens_and_creates_tables() {
     let dir = TempDir::new().unwrap();
-    let db = impactvault::store::state::StateDb::open(&dir.path().join("test.db")).unwrap();
+    let db = edinburgh_protocol::store::state::StateDb::open(&dir.path().join("test.db")).unwrap();
 
     let tables = db.list_tables().unwrap();
     // Verify core tables exist
@@ -16,6 +16,6 @@ fn test_db_opens_and_creates_tables() {
 fn test_db_open_idempotent() {
     let dir = TempDir::new().unwrap();
     let db_path = dir.path().join("test.db");
-    let _db1 = impactvault::store::state::StateDb::open(&db_path).unwrap();
-    let _db2 = impactvault::store::state::StateDb::open(&db_path).unwrap(); // second open should not error
+    let _db1 = edinburgh_protocol::store::state::StateDb::open(&db_path).unwrap();
+    let _db2 = edinburgh_protocol::store::state::StateDb::open(&db_path).unwrap(); // second open should not error
 }

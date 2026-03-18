@@ -1,4 +1,4 @@
-use impactvault::config::expand_tilde;
+use edinburgh_protocol::config::expand_tilde;
 
 #[test]
 fn test_expand_tilde() {

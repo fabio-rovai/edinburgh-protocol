@@ -1,4 +1,4 @@
-use impactvault::gateway::proxy;
+use edinburgh_protocol::gateway::proxy;
 use serde_json::json;
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter};
 

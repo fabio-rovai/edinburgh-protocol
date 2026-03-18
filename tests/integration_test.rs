@@ -3,9 +3,9 @@ use std::sync::Arc;
 use async_trait::async_trait;
 use tokio::sync::RwLock;
 
-use impactvault::domain::adapters::{TxRequest, YieldAdapter};
-use impactvault::domain::engine::*;
-use impactvault::domain::sentinel::{Sentinel, SentinelConfig};
+use edinburgh_protocol::domain::adapters::{TxRequest, YieldAdapter};
+use edinburgh_protocol::domain::engine::*;
+use edinburgh_protocol::domain::sentinel::{Sentinel, SentinelConfig};
 
 // ---------------------------------------------------------------------------
 // Mock adapter with configurable health

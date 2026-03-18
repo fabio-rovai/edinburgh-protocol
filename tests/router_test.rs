@@ -1,4 +1,4 @@
-use impactvault::gateway::router::route_tool;
+use edinburgh_protocol::gateway::router::route_tool;
 
 #[test]
 fn test_route_by_prefix() {

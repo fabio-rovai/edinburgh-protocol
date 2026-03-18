@@ -1,4 +1,4 @@
-use impactvault::orchestration::enforcer::*;
+use edinburgh_protocol::orchestration::enforcer::*;
 
 // -- 1. Built-in rules --
 
@@ -148,7 +148,7 @@ fn test_set_rule_enabled() {
 #[test]
 fn test_log_verdict_and_get_log() {
     let tmp = tempfile::NamedTempFile::new().unwrap();
-    let db = impactvault::store::state::StateDb::open(tmp.path()).unwrap();
+    let db = edinburgh_protocol::store::state::StateDb::open(tmp.path()).unwrap();
     let session_id = db.create_session(Some("test-project")).unwrap();
 
     let verdict = Verdict {
@@ -178,7 +178,7 @@ fn test_log_verdict_and_get_log() {
 #[test]
 fn test_get_log_empty() {
     let tmp = tempfile::NamedTempFile::new().unwrap();
-    let db = impactvault::store::state::StateDb::open(tmp.path()).unwrap();
+    let db = edinburgh_protocol::store::state::StateDb::open(tmp.path()).unwrap();
 
     let log = Enforcer::get_log(&db, Some("nonexistent-session"), 10);
     assert!(log.is_empty());

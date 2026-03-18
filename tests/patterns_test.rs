@@ -1,5 +1,5 @@
-use impactvault::orchestration::patterns::{Pattern, PatternService};
-use impactvault::store::state::StateDb;
+use edinburgh_protocol::orchestration::patterns::{Pattern, PatternService};
+use edinburgh_protocol::store::state::StateDb;
 use tempfile::TempDir;
 
 fn setup_db() -> (TempDir, StateDb) {

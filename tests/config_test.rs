@@ -13,17 +13,17 @@ enabled = true
 default_action = "block"
 "#).unwrap();
 
-    let config = impactvault::config::Config::load(f.path()).unwrap();
+    let config = edinburgh_protocol::config::Config::load(f.path()).unwrap();
     assert_eq!(config.general.data_dir, "/tmp/impactvault-test");
     assert!(config.enforcer.enabled);
 }
 
 #[test]
 fn test_config_defaults() {
-    let config = impactvault::config::Config::default();
+    let config = edinburgh_protocol::config::Config::default();
     assert!(config.enforcer.enabled);
     assert_eq!(config.enforcer.default_action, "block");
-    assert_eq!(config.general.data_dir, "~/.impactvault");
+    assert_eq!(config.general.data_dir, "~/.edinburgh-protocol");
     assert!(config.vault.is_none());
     assert!(config.adapters.is_none());
     assert!(config.sentinel.is_none());
@@ -40,7 +40,7 @@ fn test_vault_config_defaults() {
 [vault]
 "#).unwrap();
 
-    let config = impactvault::config::Config::load(f.path()).unwrap();
+    let config = edinburgh_protocol::config::Config::load(f.path()).unwrap();
     let vault = config.vault.expect("vault section should be present");
     assert!(vault.approved_sources.is_empty());
     assert_eq!(vault.concentration_limit, 80);
@@ -64,7 +64,7 @@ pool_address = "0xDEF"
 asset_address = "0x123"
 "#).unwrap();
 
-    let config = impactvault::config::Config::load(f.path()).unwrap();
+    let config = edinburgh_protocol::config::Config::load(f.path()).unwrap();
     let adapters = config.adapters.expect("adapters should be present");
     assert_eq!(adapters.len(), 2);
 
@@ -91,7 +91,7 @@ poll_interval_secs = 30
 auto_derisk_enabled = false
 "#).unwrap();
 
-    let config = impactvault::config::Config::load(f.path()).unwrap();
+    let config = edinburgh_protocol::config::Config::load(f.path()).unwrap();
     let sentinel = config.sentinel.expect("sentinel section should be present");
     assert_eq!(sentinel.poll_interval_secs, 30);
     assert!(!sentinel.auto_derisk_enabled);
@@ -105,7 +105,7 @@ fn test_api_config_parsing() {
 port = 8080
 "#).unwrap();
 
-    let config = impactvault::config::Config::load(f.path()).unwrap();
+    let config = edinburgh_protocol::config::Config::load(f.path()).unwrap();
     let api = config.api.expect("api section should be present");
     assert_eq!(api.port, 8080);
 }
@@ -141,7 +141,7 @@ signers = ["0xsigner1", "0xsigner2", "0xsigner3"]
 api_url = "https://api.digitalpublicgoods.net/dpgs"
 enabled = true
 "#;
-    let config: impactvault::config::Config = toml::from_str(toml_str).expect("should parse");
+    let config: edinburgh_protocol::config::Config = toml::from_str(toml_str).expect("should parse");
     let adapters = config.adapters.unwrap();
     assert_eq!(adapters.len(), 2);
     assert_eq!(adapters[0].wsteth_address.as_deref(), Some("0x1234"));

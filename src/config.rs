@@ -58,7 +58,7 @@ pub struct GeneralConfig {
 impl Default for GeneralConfig {
     fn default() -> Self {
         Self {
-            data_dir: "~/.impactvault".into(),
+            data_dir: "~/.edinburgh-protocol".into(),
         }
     }
 }

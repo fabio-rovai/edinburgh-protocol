@@ -1693,6 +1693,39 @@ dependencies = [
 ]
 
 [[package]]
+name = "edinburgh-protocol"
+version = "0.1.0"
+dependencies = [
+ "alloy",
+ "anyhow",
+ "assert_cmd",
+ "async-trait",
+ "axum",
+ "axum-test",
+ "chrono",
+ "clap",
+ "notify",
+ "predicates",
+ "regex",
+ "reqwest",
+ "rmcp",
+ "rusqlite",
+ "schemars 1.2.1",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror",
+ "tokio",
+ "tokio-tungstenite",
+ "toml",
+ "tower",
+ "tower-http",
+ "tracing",
+ "tracing-subscriber",
+ "uuid",
+]
+
+[[package]]
 name = "educe"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2487,39 +2520,6 @@ checksum = "3acae9609540aa318d1bc588455225fb2085b9ed0c4f6bd0d9d5bcd86f1a0344"
 dependencies = [
  "icu_normalizer",
  "icu_properties",
-]
-
-[[package]]
-name = "impactvault"
-version = "0.1.0"
-dependencies = [
- "alloy",
- "anyhow",
- "assert_cmd",
- "async-trait",
- "axum",
- "axum-test",
- "chrono",
- "clap",
- "notify",
- "predicates",
- "regex",
- "reqwest",
- "rmcp",
- "rusqlite",
- "schemars 1.2.1",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror",
- "tokio",
- "tokio-tungstenite",
- "toml",
- "tower",
- "tower-http",
- "tracing",
- "tracing-subscriber",
- "uuid",
 ]
 
 [[package]]

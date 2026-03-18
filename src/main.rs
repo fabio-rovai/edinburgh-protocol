@@ -1,14 +1,14 @@
 use clap::{Parser, Subcommand};
 use rmcp::ServiceExt;
 
-use impactvault::config::{expand_tilde, Config};
-use impactvault::gateway::server::ImpactVaultServer;
-use impactvault::store::state::StateDb;
+use edinburgh_protocol::config::{expand_tilde, Config};
+use edinburgh_protocol::gateway::server::ImpactVaultServer;
+use edinburgh_protocol::store::state::StateDb;
 use notify::{Event, RecursiveMode, Watcher, recommended_watcher};
 use tokio::sync::watch;
 
 const DEFAULT_CONFIG: &str = r#"[general]
-data_dir = "~/.impactvault"
+data_dir = "~/.edinburgh-protocol"
 
 [enforcer]
 enabled = true
@@ -19,7 +19,7 @@ http_port = 0
 "#;
 
 #[derive(Parser)]
-#[command(name = "impactvault", about = "Risk-curated yield infrastructure for social impact")]
+#[command(name = "edinburgh-protocol", about = "Scotland's open-source payment commitment infrastructure")]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
@@ -27,16 +27,16 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Initialize impactvault: create DB and default config
+    /// Initialize edinburgh-protocol: create DB and default config
     Init {
-        /// Path to impactvault data directory
-        #[arg(long, default_value = "~/.impactvault")]
+        /// Path to data directory
+        #[arg(long, default_value = "~/.edinburgh-protocol")]
         data_dir: String,
     },
     /// Start the MCP server
     Serve {
         /// Path to config file
-        #[arg(long, default_value = "~/.impactvault/config.toml")]
+        #[arg(long, default_value = "~/.edinburgh-protocol/config.toml")]
         config: String,
     },
 }
@@ -55,7 +55,7 @@ async fn main() -> anyhow::Result<()> {
             println!("Created data directory: {data_dir}");
 
             // Create DB
-            let db_path = data_path.join("impactvault.db");
+            let db_path = data_path.join("edinburgh-protocol.db");
             let _db = StateDb::open(&db_path)?;
             println!("Initialized database: {}", db_path.display());
 
@@ -68,10 +68,10 @@ async fn main() -> anyhow::Result<()> {
                 println!("Config already exists: {}", config_path.display());
             }
 
-            println!("\nImpactVault initialized successfully!");
+            println!("\nEdinburgh Protocol initialized successfully!");
         }
         Commands::Serve { config: config_path } => {
-            use impactvault::orchestration::enforcer::Enforcer;
+            use edinburgh_protocol::orchestration::enforcer::Enforcer;
 
             let config_path = expand_tilde(&config_path);
             let cfg = match Config::load(std::path::Path::new(&config_path)) {
@@ -88,7 +88,7 @@ async fn main() -> anyhow::Result<()> {
                 }
             };
             let data_dir = expand_tilde(&cfg.general.data_dir);
-            let db_path = std::path::Path::new(&data_dir).join("impactvault.db");
+            let db_path = std::path::Path::new(&data_dir).join("edinburgh-protocol.db");
             let db = StateDb::open(&db_path)?;
 
             // Seed built-in rules (INSERT OR IGNORE), then TOML overrides (INSERT OR REPLACE)

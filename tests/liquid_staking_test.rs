@@ -1,6 +1,6 @@
-use impactvault::domain::adapters::liquid_staking::LiquidStakingAdapter;
-use impactvault::domain::adapters::YieldAdapter;
-use impactvault::domain::engine::RiskSpectrum;
+use edinburgh_protocol::domain::adapters::liquid_staking::LiquidStakingAdapter;
+use edinburgh_protocol::domain::adapters::YieldAdapter;
+use edinburgh_protocol::domain::engine::RiskSpectrum;
 
 fn make_liquid_staking() -> LiquidStakingAdapter {
     LiquidStakingAdapter::new(

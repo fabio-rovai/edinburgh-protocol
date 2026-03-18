@@ -1,4 +1,4 @@
-use impactvault::domain::engine::*;
+use edinburgh_protocol::domain::engine::*;
 use std::collections::HashMap;
 
 // --- Task 3: Type tests ---

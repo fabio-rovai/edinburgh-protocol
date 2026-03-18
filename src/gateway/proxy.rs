@@ -71,7 +71,7 @@ pub async fn initialize_mcp(
             "protocolVersion": "2024-11-05",
             "capabilities": {},
             "clientInfo": {
-                "name": "impactvault",
+                "name": "edinburgh-protocol",
                 "version": env!("CARGO_PKG_VERSION"),
             }
         }),

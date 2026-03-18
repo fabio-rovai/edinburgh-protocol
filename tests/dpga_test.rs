@@ -1,4 +1,4 @@
-use impactvault::domain::dpga::{DpgEntry, suggest_recipients};
+use edinburgh_protocol::domain::dpga::{DpgEntry, suggest_recipients};
 
 #[test]
 fn test_dpg_entry_creation() {

@@ -1,5 +1,5 @@
-use impactvault::orchestration::lineage::{LineageEvent, LineageService};
-use impactvault::store::state::StateDb;
+use edinburgh_protocol::orchestration::lineage::{LineageEvent, LineageService};
+use edinburgh_protocol::store::state::StateDb;
 use tempfile::TempDir;
 
 fn setup() -> (TempDir, StateDb) {
@@ -344,5 +344,5 @@ fn test_cleanup_no_old_events() {
 #[test]
 fn test_lineage_router_builds() {
     let (_dir, db) = setup();
-    let _router = impactvault::orchestration::lineage::lineage_router(db);
+    let _router = edinburgh_protocol::orchestration::lineage::lineage_router(db);
 }

@@ -1,7 +1,7 @@
-use impactvault::domain::adapters::aave_savings::AaveSavingsAdapter;
-use impactvault::domain::adapters::sovereign_bond::SovereignBondAdapter;
-use impactvault::domain::adapters::YieldAdapter;
-use impactvault::domain::engine::RiskSpectrum;
+use edinburgh_protocol::domain::adapters::aave_savings::AaveSavingsAdapter;
+use edinburgh_protocol::domain::adapters::sovereign_bond::SovereignBondAdapter;
+use edinburgh_protocol::domain::adapters::YieldAdapter;
+use edinburgh_protocol::domain::engine::RiskSpectrum;
 
 fn make_sovereign() -> SovereignBondAdapter {
     SovereignBondAdapter::new(

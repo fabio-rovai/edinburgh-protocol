@@ -1,5 +1,5 @@
 use axum_test::TestServer;
-use impactvault::gateway::api::api_router;
+use edinburgh_protocol::gateway::api::api_router;
 
 #[test]
 fn test_api_router_builds() {

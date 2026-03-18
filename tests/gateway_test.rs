@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use tokio::sync::Mutex;
-use impactvault::gateway::server::ImpactVaultServer;
-use impactvault::orchestration::enforcer::Enforcer;
-use impactvault::store::state::StateDb;
+use edinburgh_protocol::gateway::server::ImpactVaultServer;
+use edinburgh_protocol::orchestration::enforcer::Enforcer;
+use edinburgh_protocol::store::state::StateDb;
 use tempfile::TempDir;
 
 fn setup() -> (TempDir, ImpactVaultServer) {

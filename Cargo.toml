@@ -1,13 +1,13 @@
 [package]
-name = "impactvault"
+name = "edinburgh-protocol"
 version = "0.1.0"
 edition = "2024"
-description = "Open-source risk-curated yield infrastructure for social impact"
+description = "Scotland's open-source payment commitment infrastructure — making late payment structurally impossible"
 license = "MIT"
-repository = "https://github.com/fabio-rovai/ImpactVault"
+repository = "https://github.com/fabio-rovai/edinburgh-protocol"
 
 [[bin]]
-name = "impactvault"
+name = "edinburgh-protocol"
 path = "src/main.rs"
 
 [dependencies]

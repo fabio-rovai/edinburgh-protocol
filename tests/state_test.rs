@@ -4,7 +4,7 @@ use tempfile::TempDir;
 fn test_create_db() {
     let dir = TempDir::new().unwrap();
     let db_path = dir.path().join("impactvault.db");
-    let _db = impactvault::store::state::StateDb::open(&db_path).unwrap();
+    let _db = edinburgh_protocol::store::state::StateDb::open(&db_path).unwrap();
     assert!(db_path.exists());
 }
 
@@ -12,7 +12,7 @@ fn test_create_db() {
 fn test_schema_tables_exist() {
     let dir = TempDir::new().unwrap();
     let db_path = dir.path().join("impactvault.db");
-    let db = impactvault::store::state::StateDb::open(&db_path).unwrap();
+    let db = edinburgh_protocol::store::state::StateDb::open(&db_path).unwrap();
 
     let tables = db.list_tables().unwrap();
     assert!(tables.contains(&"sessions".to_string()));
@@ -37,7 +37,7 @@ fn test_schema_tables_exist() {
 #[test]
 fn test_create_session() {
     let dir = TempDir::new().unwrap();
-    let db = impactvault::store::state::StateDb::open(&dir.path().join("test.db")).unwrap();
+    let db = edinburgh_protocol::store::state::StateDb::open(&dir.path().join("test.db")).unwrap();
     let session_id = db.create_session(Some("test-project")).unwrap();
     assert!(!session_id.is_empty());
 }

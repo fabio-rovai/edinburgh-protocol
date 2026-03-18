@@ -1,6 +1,6 @@
-use impactvault::domain::adapters::compound_lending::CompoundLendingAdapter;
-use impactvault::domain::adapters::YieldAdapter;
-use impactvault::domain::engine::RiskSpectrum;
+use edinburgh_protocol::domain::adapters::compound_lending::CompoundLendingAdapter;
+use edinburgh_protocol::domain::adapters::YieldAdapter;
+use edinburgh_protocol::domain::engine::RiskSpectrum;
 
 fn make_compound() -> CompoundLendingAdapter {
     CompoundLendingAdapter::new(
