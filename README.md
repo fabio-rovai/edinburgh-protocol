@@ -10,7 +10,7 @@ The Edinburgh Protocol is a fork of [ImpactVault](https://github.com/fabio-rovai
 
 Late payment is a structural failure in Scottish business:
 
-- **61.3% of Scottish invoices are paid late** (BACS/Experian Pay.UK data)
+- **61.3% of Scottish invoices are paid late** (FreeAgent analysis, Scottish Financial News, October 2025)
 - The Scottish Government's 10-day prompt payment policy cannot self-enforce across supply chains
 - Late payment costs Scottish SMEs an average of **£22,000 per year** in lost productivity, borrowing costs, and administrative burden
 - Voluntary payment codes and naming-and-shaming have not shifted the needle

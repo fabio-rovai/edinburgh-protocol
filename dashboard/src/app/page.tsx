@@ -1,66 +1,71 @@
 import MetricCard from '@/components/MetricCard';
+import InvoicePipeline from '@/components/InvoicePipeline';
+import ActivityFeed from '@/components/ActivityFeed';
 import AllocationPie from '@/components/AllocationPie';
-import YieldChart from '@/components/YieldChart';
 
 const allocationData = [
-  { name: 'Sovereign Bond', value: 500000 },
-  { name: 'Aave Savings', value: 300000 },
-  { name: 'Liquid Staking', value: 150000 },
-  { name: 'Compound Lending', value: 50000 },
-];
-
-const yieldData = [
-  { date: 'Jan', yield: 1200 },
-  { date: 'Feb', yield: 2400 },
-  { date: 'Mar', yield: 3100 },
-  { date: 'Apr', yield: 4800 },
-  { date: 'May', yield: 6200 },
-  { date: 'Jun', yield: 7500 },
-  { date: 'Jul', yield: 8900 },
+  { name: 'Sovereign Bond', value: 320000 },
+  { name: 'Aave Savings', value: 195000 },
+  { name: 'Liquid Staking', value: 97000 },
+  { name: 'Compound Lending', value: 35500 },
 ];
 
 export default function OverviewPage() {
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Overview</h2>
+      {/* Header */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold">Overview</h2>
+        <p className="text-sm text-gray-500 mt-1">
+          Making late payment structurally impossible
+        </p>
+      </div>
 
-      {/* Metric Cards */}
+      {/* Hero Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <MetricCard
-          label="Total Value Locked"
-          value="$1,000,000"
-          subtitle="Across 4 adapters"
+          label="Total Locked"
+          value="£647,500"
+          subtitle="Across 8 invoices"
         />
         <MetricCard
-          label="Total Yield"
-          value="$8,900"
-          subtitle="+12.3% this month"
+          label="Active Invoices"
+          value="5"
+          subtitle="3 streaming, 2 locked"
         />
         <MetricCard
-          label="Total Disbursed"
-          value="$5,200"
-          subtitle="To 3 recipients"
+          label="Avg Days to Payment"
+          value="4.2"
+          subtitle="vs. 47 days industry avg"
         />
         <MetricCard
-          label="Active Adapters"
-          value="4"
-          subtitle="All healthy"
+          label="Yield Generated"
+          value="£2,184"
+          subtitle="Offsetting early-payment discounts"
         />
       </div>
 
-      {/* Charts */}
+      {/* Pipeline Visualisation */}
+      <div className="bg-surface border border-border rounded-xl p-6 mb-8">
+        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-6">
+          Invoice Lifecycle
+        </h3>
+        <InvoicePipeline />
+      </div>
+
+      {/* Bottom Row: Allocation + Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-surface border border-border rounded-xl p-6">
           <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
-            Allocation
+            Vault Allocation
           </h3>
           <AllocationPie data={allocationData} />
         </div>
         <div className="bg-surface border border-border rounded-xl p-6">
           <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
-            Yield Over Time
+            Recent Activity
           </h3>
-          <YieldChart data={yieldData} />
+          <ActivityFeed />
         </div>
       </div>
     </div>
