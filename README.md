@@ -19,16 +19,19 @@ The root cause is simple: payment terms are promises, not commitments. There is 
 
 ## How It Works
 
-```
-┌─────────┐     ┌─────────┐     ┌──────────┐     ┌──────────┐
-│  LOCK    │────▶│  EARN   │────▶│  STREAM  │────▶│  SETTLE  │
-└─────────┘     └─────────┘     └──────────┘     └──────────┘
-Buyer deposits   Funds earn     Supplier can      Auto-release
-GBP-stablecoin   yield via      claim early       at maturity.
-at invoice       risk-curated   (yield offsets     Invoice NFT
-acceptance.      vault          discount) or       burns.
-                 adapters.      stream from
-                                day one.
+```mermaid
+flowchart LR
+    L["**Lock**\nBuyer deposits\nGBP-stablecoin\nat invoice acceptance"]
+    E["**Earn**\nFunds generate yield\nvia risk-curated\nvault adapters"]
+    S["**Stream**\nSupplier claims early\n(yield offsets discount)\nor streams from day one"]
+    T["**Settle**\nAuto-release at maturity\nInvoice NFT burns\nNo approval required"]
+
+    L -->|deposit| E -->|yield| S -->|maturity| T
+
+    style L fill:#1e40af,stroke:#3b82f6,color:#fff
+    style E fill:#92400e,stroke:#f59e0b,color:#fff
+    style S fill:#065f46,stroke:#22c55e,color:#fff
+    style T fill:#581c87,stroke:#a855f7,color:#fff
 ```
 
 1. **Lock** — Buyer deposits GBP-stablecoin into the InvoiceVault at invoice acceptance. A soulbound InvoiceNFT is minted to the supplier as proof of commitment.
@@ -38,39 +41,49 @@ acceptance.      vault          discount) or       burns.
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    EDINBURGH PROTOCOL                       │
-│                     (New Layer)                             │
-│                                                             │
-│  ┌──────────────┐  ┌──────────────┐                         │
-│  │ InvoiceVault │  │  InvoiceNFT  │  Payment streaming      │
-│  │   (.sol)     │  │   (.sol)     │  GBP-stablecoin         │
-│  │              │  │  Soulbound   │  integration            │
-│  └──────┬───────┘  └──────────────┘                         │
-│         │ extends                                           │
-├─────────┼───────────────────────────────────────────────────┤
-│         ▼                                                   │
-│                    IMPACTVAULT                               │
-│                  (Inherited Layer)                           │
-│                                                             │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
-│  │ ImpactVault  │  │YieldSplitter │  │ImpactMultisig│       │
-│  │  ERC-4626    │  │  Yield dist  │  │  N-of-M gov  │       │
-│  └──────────────┘  └──────────────┘  └──────────────┘       │
-│                                                             │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
-│  │ Risk Engine  │  │  Sentinel    │  │  Enforcer    │       │
-│  │ 4 adapters   │  │  Health mon  │  │  Rule engine │       │
-│  └──────────────┘  └──────────────┘  └──────────────┘       │
-│                                                             │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
-│  │  Dashboard   │  │  MCP Server  │  │   REST API   │       │
-│  │  Next.js     │  │  19 tools    │  │   Axum       │       │
-│  └──────────────┘  └──────────────┘  └──────────────┘       │
-│                                                             │
-│  164 tests (139 Rust + 25 Solidity)                         │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+block-beta
+    columns 3
+
+    block:new["Edinburgh Protocol (New Layer)"]:3
+        InvoiceVault["InvoiceVault.sol\nextends ERC-4626"]
+        InvoiceNFT["InvoiceNFT.sol\nSoulbound ERC-721"]
+        Planned["Payment Streaming\nGBP-Stablecoin"]
+    end
+
+    space:3
+
+    block:inherited["ImpactVault (Inherited Layer)"]:3
+        columns 3
+        ImpactVault["ImpactVault\nERC-4626 Vault"]
+        YieldSplitter["YieldSplitter\nYield Distribution"]
+        ImpactMultisig["ImpactMultisig\nN-of-M Governance"]
+
+        RiskEngine["Risk Engine\n4 Yield Adapters"]
+        Sentinel["Sentinel\nHealth Monitor"]
+        Enforcer["Enforcer\nRule Engine"]
+
+        Dashboard["Dashboard\nNext.js 15"]
+        MCPServer["MCP Server\n19 Tools"]
+        RestAPI["REST API\nAxum"]
+    end
+
+    InvoiceVault --> ImpactVault
+
+    style new fill:#1e1b4b,stroke:#6366f1,color:#fff
+    style inherited fill:#0c0a09,stroke:#44403c,color:#fff
+    style InvoiceVault fill:#1e40af,stroke:#3b82f6,color:#fff
+    style InvoiceNFT fill:#1e40af,stroke:#3b82f6,color:#fff
+    style Planned fill:#1e40af,stroke:#3b82f6,color:#fff,stroke-dasharray:5
+    style ImpactVault fill:#141414,stroke:#525252,color:#fff
+    style YieldSplitter fill:#141414,stroke:#525252,color:#fff
+    style ImpactMultisig fill:#141414,stroke:#525252,color:#fff
+    style RiskEngine fill:#141414,stroke:#525252,color:#fff
+    style Sentinel fill:#141414,stroke:#525252,color:#fff
+    style Enforcer fill:#141414,stroke:#525252,color:#fff
+    style Dashboard fill:#141414,stroke:#525252,color:#fff
+    style MCPServer fill:#141414,stroke:#525252,color:#fff
+    style RestAPI fill:#141414,stroke:#525252,color:#fff
 ```
 
 ### Inherited from ImpactVault
