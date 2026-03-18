@@ -96,6 +96,18 @@ The full ImpactVault codebase is preserved and operational:
 - **Payment streaming** — Continuous yield streaming to suppliers (planned)
 - **GBP-stablecoin integration** — Integration with FCA-regulated GBP stablecoins (planned, aligned with FCA sandbox 2026)
 
+## Dashboard
+
+The Edinburgh Protocol includes a real-time dashboard for monitoring invoice commitments, yield generation, and vault health.
+
+![Overview — Hero metrics, invoice lifecycle pipeline, vault allocation, and activity feed](docs/screenshots/overview.png)
+
+![Invoices — Payment commitments with status tracking across Scottish SMEs](docs/screenshots/invoices.png)
+
+![Yield Adapters — Health-scored adapters across the risk spectrum](docs/screenshots/adapters.png)
+
+![Risk & Sentinel — Overall health, sentinel monitoring, and enforcer rules](docs/screenshots/risk.png)
+
 ## Quick Start
 
 ### Prerequisites
